@@ -1,0 +1,87 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 4044774 */
+  src: url('iconfont.woff2?t=1682934614502') format('woff2'),
+       url('iconfont.woff?t=1682934614502') format('woff'),
+       url('iconfont.ttf?t=1682934614502') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-Playerpause:before {
+  content: "\e6b2";
+}
+
+.icon-cha:before {
+  content: "\e61a";
+}
+
+.icon-icon-:before {
+  content: "\e630";
+}
+
+.icon-xiangyoujiantou:before {
+  content: "\e65f";
+}
+
+.icon-xiangzuojiantou:before {
+  content: "\e660";
+}
+
+.icon-liebiaoxunhuan:before {
+  content: "\e604";
+}
+
+.icon-xiangxia2:before {
+  content: "\e772";
+}
+
+.icon-bofang:before {
+  content: "\e600";
+}
+
+.icon-ziyuanldpi:before {
+  content: "\e61b";
+}
+
+.icon-tianjia:before {
+  content: "\e679";
+}
+
+.icon-weibiaoti--:before {
+  content: "\e60f";
+}
+
+.icon-faxian:before {
+  content: "\e620";
+}
+
+.icon-Playerplay:before {
+  content: "\e6b0";
+}
+
+.icon-Playernext:before {
+  content: "\e6b1";
+}
+
+.icon-gedan:before {
+  content: "\e636";
+}
+
+.icon-gedan1:before {
+  content: "\e6bf";
+}
+
+.icon-wenjianyinle:before {
+  content: "\e8a2";
+}
+
+.icon-Playernext-copy:before {
+  content: "\e8a3";
+}
+

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>窝抑云阴乐~</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./download/font_4044774_pqjta339l5f/iconfont.css">
+    <script src="./jquery-3.6.4.js"></script>
+    <!-- <script src="./musicApp.js"></script> -->
+
+</head>
+
+<body>
+    <div id="app">
+        <section class="my-container">
+            <!-- 当前播放列表 -->
+            <div class="drawer-wrapper drawer-none">
+                <div class="drawer-container">
+                    <div class="drawer-rtl">
+                        <!-- 播放列表头部 -->
+                        <header class="drawer-header">
+                            <span style="color: gray;margin-right: 160px;">当前播放列表</span>
+                            <button class="drawer-btn">
+                                <i class="iconfont icon-cha"></i>
+                            </button>
+                        </header>
+                        <!-- 播放列表内容 -->
+                        <section class="drawer-body">
+                            <!-- 播放列表内容-标题 -->
+                            <div class="table-header-wrapper">
+                                <table class="table-header">
+                                    <thead class="table-gutter">
+                                        <tr>
+                                            <th class="drawer-column">
+                                                <div class="cell">音乐标题</div>
+                                            </th>
+                                            <th class="drawer-column">
+                                                <div class="cell">歌手</div>
+                                            </th>
+                                            <th class="drawer-column">
+                                                <div class="cell">时长</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <!-- 播放列表内容-身子(bushi) -->
+                            <div class="drawer-table-body">
+                                <table class="table-body">
+                                    <tbody>
+                                        <tr class="table-row">
+                                            <td class="drawer-column">
+                                                <div class="cell">暂无歌曲</div>
+                                            </td>
+                                            <td class="drawer-column">
+                                                <div class="cell">暂无歌曲</div>
+                                            </td>
+                                            <td class="drawer-column">
+                                                <div class="cell">暂无歌曲</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <!-- 头部 -->
+            <header>
+                <div class="nav">
+                    <ul class="nav-top">
+                        <li class="logo">
+                            <img src="./images/music.png" alt="">
+                            <span class="logoname">窝抑云阴乐~</span>
+                        </li>
+                        <li>
+                            <div class="search">
+                                <div>
+                                    <i>
+                                        <?xml version="1.0" encoding="UTF-8"?>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"
+                                            viewBox="0 0 18 18" version="1.1">
+                                            <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+                                            <title>Public/ic_public_input_search</title>
+                                            <desc>Created with Sketch.</desc>
+                                            <g id="__Public/ic_public_input_search" stroke="none" stroke-width="1"
+                                                fill="none" fill-rule="evenodd">
+                                                <path
+                                                    d="M13.2129889,12.2463949 L15.6099466,14.6430364 C15.9028398,14.9359296 15.9028398,15.4108033 15.6099466,15.7036966 C15.3170533,15.9965898 14.8421796,15.9965898 14.5492864,15.7036966 L12.1424668,13.2968868 C12.5355197,12.9856781 12.8945263,12.6333482 13.2129889,12.2463949 Z M7.78125,1.5 C11.2502886,1.5 14.0625,4.31221142 14.0625,7.78125 C14.0625,9.23090694 13.571411,10.5658639 12.7465202,11.6288338 L12.5852288,11.8281795 C12.5065389,11.9214937 12.4251798,12.0124834 12.3412691,12.1010309 L12.2391385,12.2063305 L12.2391385,12.2063305 L12.1042686,12.3381988 L12.1042686,12.3381988 L12.0040285,12.4312816 L12.0040285,12.4312816 L11.7500714,12.6500283 L11.7500714,12.6500283 L11.6103411,12.7608162 L11.6103411,12.7608162 C10.5503999,13.5770819 9.22251268,14.0625 7.78125,14.0625 C4.31221142,14.0625 1.5,11.2502886 1.5,7.78125 C1.5,4.31221142 4.31221142,1.5 7.78125,1.5 Z M7.78125,3 C5.14063854,3 3,5.14063854 3,7.78125 C3,10.4218615 5.14063854,12.5625 7.78125,12.5625 C10.4218615,12.5625 12.5625,10.4218615 12.5625,7.78125 C12.5625,5.14063854 10.4218615,3 7.78125,3 Z"
+                                                    id="__形状" fill="#fff" fill-rule="nonzero" />
+                                            </g>
+                                        </svg>
+                                    </i>
+                                </div>
+                                <div>
+                                    <input type="text" class="search-input">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="user">
+                            <div class="user-head"><img src="./images/user-head.png" alt=""></div>
+                            <div class="user-name">点击登录</div>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <!-- 中间部分 -->
+            <section class="my-container" id="main-container">
+                <!-- 左侧导航栏 -->
+                <aside class="my-aside">
+                    <div class="aside-bar">
+                        <ul class="aside-menu">
+                            <li class="menu-main">
+                                <i class="iconfont icon-faxian"></i>
+                                <span>
+                                    发现音乐
+                                </span>
+                            </li>
+                            <li class="menu-local">
+                                <i class="iconfont icon-wenjianyinle"></i>
+                                <span>
+                                    本地歌单
+                                </span>
+                            </li>
+                            <li>
+                                <i class="iconfont icon-gedan"></i>
+                                <span>
+                                    我的歌单
+                                </span>
+                                <i class="iconfont icon-xiangxia2 aside-right-i"></i>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+                <!-- 右侧主要内容 -->
+                <main class="my-main scroll-box">
+                    <div class="main-page">
+                        <div class="home w">
+                            <!-- 轮播图 -->
+                            <div class="slideshow">
+                                <div class="slide-wrap">
+                                    <button class="btn-left"><i class="iconfont icon-xiangzuojiantou"></i></button>
+                                    <button class="btn-right"><i class="iconfont icon-xiangyoujiantou"></i></button>
+                                    <img src="./images/slideshow1.jpg" alt="">
+                                </div>
+                                <div class="slide-footer">
+                                    <ul>
+                                        <li class="slide-li active"></li>
+                                        <li class="slide-li"></li>
+                                        <li class="slide-li"></li>
+                                        <li class="slide-li"></li>
+                                        <li class="slide-li"></li>
+                                        <li class="slide-li"></li>
+                                        <li class="slide-li"></li>
+                                        <li class="slide-li"></li>
+                                        <li class="slide-li"></li>
+                                        <li class="slide-li"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <span>注: 果咩！当前只能点击查看轮播图的单曲</span>
+                            <!-- 热门歌单 -->
+                            <div class="song-list">
+                                <h3>热门歌单></h3>
+                                <ul class="list">
+                                    <!-- <li>
+                                        <div class="song-image">
+                                            <img src="./images/song-image1.jpg" alt="">
+                                        </div>
+                                        <div class="song-name">软萌合唱｜让可愛治愈这个世界</div>
+                                        <div class="song-author">
+                                            <i>by</i>
+                                            <span>阿卡琳</span>
+                                        </div>
+                                    </li> -->
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page page-none">
+                        <div class="home w">
+                            <div class="list-infor">
+                                <div class="list-img">
+                                    <img src="./images/song-image1.jpg" alt="">
+                                </div>
+                                <ul class="list-detail">
+                                    <li class="list-name">
+                                        <div class="list-topic">歌单</div>
+                                        <h3 style="font-size:20px;color: #fff;">软萌合唱｜让可愛治愈这个世界</h3>
+                                    </li>
+                                    <li class="list-author">
+                                        <div class="author-img">
+                                            <img src="./images/list-author.jpg" alt="">
+                                        </div>
+                                        <div class="author-name">阿卡琳</div>
+                                        <div class="author-time">创建于 2016-9-27</div>
+                                    </li>
+                                    <li class="list-button">
+                                        <div class="play-all">
+                                            <i class="iconfont icon-Playerplay"></i>
+                                            <span>播放全部</span>
+                                        </div>
+                                    </li>
+                                    <li class="list-tag">
+                                        <span>标签:</span>
+                                        <div class="item">日语</div>
+                                        <div class="item">治愈</div>
+                                        <div class="item">ACG</div>
+                                    </li>
+                                    <li class="list-count">
+                                        <span>歌曲：</span>
+                                        <!-- 398 -->
+                                        <span id="track-count">389</span>
+                                        <span style="margin-left: 5px;">播放：</span>
+                                        <!-- 114511 -->
+                                        <span id="play-count">114511</span>
+                                    </li>
+                                    <li class="list-introduce">
+                                        简介: 精选轻快软萌的合唱歌曲，希望这样柔软的声音能治愈你的心(๑• . •๑) 选曲只参考听感，不考究歌手/声优，不关联相关动画角色。
+                                        原歌单名：萝莉合唱｜快被萌化了 (๑• . •๑) 封面来源画师：しらたま（白玉） Pixiv id: 57922779 46379426 51542793
+                                        72241142 77559972
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="list-table">
+                                <div class="table-header-wrapper">
+                                    <table class="table-header">
+                                        <thead class="table-gutter">
+                                            <tr>
+                                                <th class="table-column1">
+                                                    <div class="cell">音乐标题</div>
+                                                </th>
+                                                <th class="table-column2">
+                                                    <div class="cell">歌手</div>
+                                                </th>
+                                                <th class="table-column3">
+                                                    <div class="cell">专辑</div>
+                                                </th>
+                                                <th class="table-column4">
+                                                    <div class="cell">时长</div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="table-body-wrapper">
+                                    <table class="table-body">
+                                        <tbody id="list-body" class="list-table-body">
+                                            <tr class="table-row">
+                                                <td class="table-column1">
+                                                    <div class="cell">おかえり ( 欢迎回来 )</div>
+                                                </td>
+                                                <td class="table-column2">
+                                                    <div class="cell">小岩井ことり</div>
+                                                </td>
+                                                <td class="table-column3">
+                                                    <div class="cell">おかえり</div>
+                                                </td>
+                                                <td class="table-column4">
+                                                    <div class="cell">05:30</div>
+                                                </td>
+                                            </tr>
+                                            <tr class="table-row">
+                                                <td>
+                                                    <div class="cell">可愛くなりたい ( 想变得可爱 )</div>
+                                                </td>
+                                                <td>
+                                                    <div class="cell">HoneyWorks</div>
+                                                </td>
+                                                <td>
+                                                    <div class="cell">可愛くなりたい</div>
+                                                </td>
+                                                <td>
+                                                    <div class="cell">04:12</div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </section>
+            <section class="lyric page-none">
+                歌词还没有做哦
+            </section>
+            <!-- jio鸭子 -->
+            <footer>
+                <div class="listen">
+                    <!-- 播放器 -->
+                    <audio src="https://music.163.com/song/media/outer/url?id=28613680.mp3"></audio>
+                    <!-- 底部左侧歌词按钮 -->
+                    <div class="listen-infor">
+                        <div class="listen-img">
+                            <img src="./images/infor.png" alt="">
+                        </div>
+                        <div class="listen-detail">
+                            <div class="listen-name">
+                                暂无歌曲信息
+                            </div>
+                            <div class="listen-author">
+                                暂无歌曲信息
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 底部中间播放器控件 -->
+                    <div class="listen-control">
+                        <!-- 中间按钮控件 -->
+                        <div class="control-list">
+                            <div class="play-type"><i class="iconfont icon-liebiaoxunhuan"></i></div>
+                            <div class="left"><i class="iconfont icon-Playernext-copy"></i></div>
+                            <div class="play" style="display: block;"><i class="iconfont icon-Playerplay"></i></div>
+                            <div class="pause" style="display: none;"><i class="iconfont icon-Playerpause"></i></div>
+                            <div class="right"><i class="iconfont icon-Playernext"></i></div>
+                            <div><i class="iconfont icon-tianjia"></i></div>
+                        </div>
+                        <!-- 进度条控件 -->
+                        <div class="progress-bar">
+                            <span id="timing">00:00</span>
+                            <div class="slider">
+                                <div class="slider-runway">
+                                    <div class="slider-bar"></div>
+                                    <div class="slider-tag">
+                                        <div class="slider-intag"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span id="end-time">00:00</span>
+                        </div>
+                    </div>
+                    <!-- 底部右侧当前播放列表按钮 -->
+                    <div class="listen-button">
+                        <div class="list-btn">
+                            <i class="iconfont icon-gedan1"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </footer>
+
+        </section>
+    </div>
+</body>
+<script src="./musicApp.js"></script>
+
+</html>
