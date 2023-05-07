@@ -195,9 +195,11 @@ window.onload = function () {
         // 获取热门歌单
         const xhr = new XMLHttpRequest()
         const List = document.querySelector('.list')
+
         let arr = {}
 
-        let recomList=[]
+        let recomList = []
+
 
         //设置响应体数据类型
         xhr.responseType = 'json'
@@ -255,34 +257,36 @@ window.onload = function () {
                                     // console.log(res)
                                     console.log(res.privileges)
 
-                                    document.querySelector('.list-img img').src=res.playlist.coverImgUrl
-                                    document.querySelector('.list-name h3').innerHTML=res.playlist.name
-                                    document.querySelector('.author-img img').src=res.playlist.creator.avatarUrl
-                                    document.querySelector('.author-name').innerHTML=res.playlist.creator.nickname
-                                    const item= document.querySelectorAll('.item')
-                                    for(let k=0;k<item.length;k++){
-                                        item[k].innerHTML=res.playlist.tags[k]
+                                    document.querySelector('.list-img img').src = res.playlist.coverImgUrl
+                                    document.querySelector('.list-name h3').innerHTML = res.playlist.name
+                                    document.querySelector('.author-img img').src = res.playlist.creator.avatarUrl
+                                    document.querySelector('.author-name').innerHTML = res.playlist.creator.nickname
+                                    const item = document.querySelectorAll('.item')
+                                    for (let k = 0; k < item.length; k++) {
+                                        item[k].innerHTML = res.playlist.tags[k]
                                     }
-                                    document.getElementById('track-count').innerHTML=res.playlist.trackCount
-                                    document.getElementById('play-count').innerHTML=res.playlist.playCount
-                                    document.querySelector('.list-introduce').innerHTML=res.playlist.description
+                                    document.getElementById('track-count').innerHTML = res.playlist.trackCount
+                                    document.getElementById('play-count').innerHTML = res.playlist.playCount
+                                    document.querySelector('.list-introduce').innerHTML = res.playlist.description
 
                                     //获取歌单内歌曲详情
-                                    for(let j=0;j<res.privileges.length;j++){
+                                    const recomNowList = []
+
+                                    for (let j = 0; j < res.privileges.length; j++) {
                                         // console.log(j)
                                         myAjax({
-                                        method: 'GET',
-                                        url:'http://47.120.38.121:3000/song/detail',
-                                        data:{
-                                            ids:res.privileges[j].id
-                                        },
-                                        success:function(ress){
-                                            console.log(ress)
-                                            // recomList.push(ress)
-                                            // console.log(recomList)
-                                            let tr = document.createElement('tr')
-                                            tr.classList.add('table-row')
-                                            tr.innerHTML=`
+                                            method: 'GET',
+                                            url: 'http://47.120.38.121:3000/song/detail',
+                                            data: {
+                                                ids: res.privileges[j].id
+                                            },
+                                            success: function (ress) {
+                                                // console.log(ress)
+                                                // recomList.push(ress)
+                                                // console.log(recomList)
+                                                let tr = document.createElement('tr')
+                                                tr.classList.add('table-row')
+                                                tr.innerHTML = `
                                             <td class="table-column1" id="song-name-${j}">
                                                     <div class="cell">${ress.songs[0].name}</div>
                                             </td>
@@ -295,14 +299,218 @@ window.onload = function () {
                                             <td class="table-column4" id="song-time-${j}">
                                                 <div class="cell">05:30</div>
                                             </td>`
-                                            document.getElementById('list-body').appendChild(tr)
-                                        }
-                                    })
+                                                document.getElementById('list-body').appendChild(tr)
+                                                recomNowList.push({
+                                                    id: j,
+                                                    name: ress.songs[0].name,
+                                                    author: ress.songs[0].ar[0].name,
+                                                    list: ress.songs[0].al.name,
+                                                    musicUrl: 'https://music.163.com/song/media/outer/url?id=' + ress.songs[0].id,
+                                                    picUrl: ress.songs[0].al.picUrl
+                                                })
+                                                // console.log(recomNowList)
+                                                if (recomNowList.length === res.privileges.length) {
+                                                    //获取播放器
+                                                    const musicAudio = document.querySelector('audio')
+                                                    //获取按钮
+                                                    const playAll = document.querySelector('.play-all')
+                                                    const playSong = document.querySelector('.play')
+                                                    const pauseSong = document.querySelector('.pause')
+                                                    const nextSong = document.querySelector('.right')
+                                                    const lastSong = document.querySelector('.left')
+                                                    const beforeDTR = document.querySelector('.drawer-body .table-row')
+                                                    const drawerBody = document.querySelector('.drawer-body tbody')
+                                                    const slideRunway = document.querySelector('.slider-runway')
+                                                    const sliderTag = document.querySelector('.slider-tag')
+                                                    let numSong = -1
+                                                    let songFlag = 0
+                                                    let sliderFlag = 0
+                                                    //录入歌单第一首歌
+                                                    playAll.addEventListener('click', function () {
+                                                        if (songFlag === 0) {
+                                                            // console.log(11)
+                                                            numSong = 0
+                                                            songFlag = 1
+                                                            // console.log(typeof (numSong))
+                                                            // console.log(myList[0].musicUrl)
+                                                            musicAudio.src = recomNowList[numSong].musicUrl
+                                                            //转换为开始按钮
+                                                            playSong.style.display = 'block'
+                                                            pauseSong.style.display = 'none'
+                                                            // console.log(musicAudio.src)
+                                                            beforeDTR.style.display = 'none'
+                                                            for (let i = 0; i < recomNowList.length; i++) {
+                                                                // console.log(11)
+                                                                let tr = document.createElement('tr')
+                                                                tr.classList.add('table-row-change')
+                                                                //更换左下角信息
+                                                                document.querySelector('.listen-name').innerHTML = recomNowList[numSong].name
+                                                                document.querySelector('.listen-author').innerHTML = recomNowList[numSong].author
+                                                                document.querySelector('.listen-img img').src = recomNowList[numSong].picUrl
+                                                                tr.innerHTML = `
+                                                            <td class="drawer-column">
+                                                                <div class="cell">${recomNowList[i].name}</div>
+                                                            </td>
+                                                            <td class="drawer-column">
+                                                                <div class="cell">${recomNowList[i].author}</div>
+                                                            </td>
+                                                            <td class="drawer-column">
+                                                                <div class="cell">00:00</div>
+                                                            </td>`
+                                                                //给第一首歌添加高亮
+                                                                drawerBody.appendChild(tr)
+                                                                if (numSong === i) {
+                                                                    tr.classList.add('drawer-row-song-change')
+                                                                }
+                                                                //歌单内双击歌曲播放
+                                                                tr.addEventListener('dblclick', function () {
+                                                                    // console.log(22)
+                                                                    numSong = i
+                                                                    musicAudio.pause()
+                                                                    musicAudio.src = recomNowList[numSong].musicUrl
+                                                                    musicAudio.play()
+                                                                    //转换为停止按钮
+                                                                    playSong.style.display = 'none'
+                                                                    pauseSong.style.display = 'block'
+                                                                    //高亮跳转
+                                                                    document.querySelector('.drawer-row-song-change').classList.remove('drawer-row-song-change')
+                                                                    tr.classList.add('drawer-row-song-change')
+                                                                    //更换左下角信息
+                                                                    document.querySelector('.listen-name').innerHTML = recomNowList[numSong].name
+                                                                    document.querySelector('.listen-author').innerHTML = recomNowList[numSong].author
+                                                                    document.querySelector('.listen-img img').src = recomNowList[numSong].picUrl
+                                                                })
+
+                                                            }
+                                                        }
+                                                    })
+                                                    //开始
+                                                    playSong.addEventListener('click', function () {
+                                                        // console.log(11)
+                                                        musicAudio.play()
+                                                        //转换为停止按钮
+                                                        playSong.style.display = 'none'
+                                                        pauseSong.style.display = 'block'
+                                                        timeSpan()
+                                                    })
+                                                    //停止
+                                                    pauseSong.addEventListener('click', function () {
+                                                        musicAudio.pause()
+                                                        //转换为开始按钮
+                                                        playSong.style.display = 'block'
+                                                        pauseSong.style.display = 'none'
+                                                        // clearInterval('timeSpan')
+                                                    })
+                                                    //下一首
+                                                    nextSong.addEventListener('click', function () {
+                                                        // console.log(numSong)
+                                                        numSong = numSong + 1 >= recomNowList.length ? 0 : numSong + 1
+                                                        // console.log(numSong)
+                                                        musicAudio.pause()
+                                                        musicAudio.src = recomNowList[numSong].musicUrl
+                                                        musicAudio.play()
+                                                        //转换为停止按钮
+                                                        playSong.style.display = 'none'
+                                                        pauseSong.style.display = 'block'
+                                                        //更换左下角信息
+                                                        document.querySelector('.listen-name').innerHTML = recomNowList[numSong].name
+                                                        document.querySelector('.listen-author').innerHTML = recomNowList[numSong].author
+                                                        document.querySelector('.listen-img img').src = recomNowList[numSong].picUrl
+                                                    })
+                                                    //上一首
+                                                    lastSong.addEventListener('click', function () {
+                                                        // console.log(numSong)
+                                                        numSong = numSong - 1 < 0 ? recomNowList.length - 1 : numSong - 1
+                                                        // console.log(numSong)
+                                                        musicAudio.pause()
+                                                        musicAudio.src = recomNowList[numSong].musicUrl
+                                                        musicAudio.play()
+                                                        //转换为停止按钮
+                                                        playSong.style.display = 'none'
+                                                        pauseSong.style.display = 'block'
+                                                        //更换左下角信息
+                                                        document.querySelector('.listen-name').innerHTML = recomNowList[numSong].name
+                                                        document.querySelector('.listen-author').innerHTML = recomNowList[numSong].author
+                                                        document.querySelector('.listen-img img').src = recomNowList[numSong].picUrl
+                                                    })
+                                                    //播放结束时自动播放下一首
+                                                    musicAudio.addEventListener('ended', function () {
+                                                        numSong = numSong + 1 >= recomNowList.length ? 0 : numSong + 1
+                                                        musicAudio.pause()
+                                                        musicAudio.src = recomNowList[numSong].musicUrl
+                                                        musicAudio.play()
+                                                        //转换为停止按钮
+                                                        playSong.style.display = 'none'
+                                                        pauseSong.style.display = 'block'
+                                                        //更换左下角信息
+                                                        document.querySelector('.listen-name').innerHTML = recomNowList[numSong].name
+                                                        document.querySelector('.listen-author').innerHTML = recomNowList[numSong].author
+                                                        document.querySelector('.listen-img img').src = recomNowList[numSong].picUrl
+                                                    })
+                                                    //进度条控件  //能用但是不是很能用(或者说很没用)
+                                                    slideRunway.addEventListener('mousedown', function (e) {
+                                                        //拖拽状态设为1
+                                                        sliderFlag = 1
+                                                    })
+                                                    slideRunway.addEventListener('mouseup', function () {
+                                                        sliderFlag = 0
+                                                    })
+                                                    slideRunway.addEventListener('mousemove', function (e) {
+                                                        if (sliderFlag === 1) {
+                                                            // console.log(e.clientX)
+                                                            changeProcess(e.clientX)
+                                                        }
+                                                    })
+
+
+                                                    function timeSpan() {
+                                                        setInterval(process, 1000)
+                                                    }
+
+                                                    function process() {
+                                                        let Process_Now = (musicAudio.currentTime * 100 / musicAudio.duration) + '%'
+                                                        document.querySelector('.slider-bar').style.width = Process_Now
+                                                        sliderTag.style.left = Process_Now
+                                                        let current_Time = timeFormat(musicAudio.currentTime)
+                                                        let time_All = timeFormat(musicAudio.duration)
+                                                        // document.getElementById("songtime").innerHTML = current_Time + " | " + time_All;
+                                                        document.getElementById('timing').innerHTML = current_Time
+                                                        document.getElementById('end-time').innerHTML = time_All
+                                                        // console.log(musicAudio.fastSeek)
+                                                        // console.log(musicAudio.currentTime)
+
+                                                    }
+
+                                                    function timeFormat(number) {
+                                                        var minute = parseInt(number / 60);
+                                                        var second = parseInt(number % 60);
+                                                        minute = minute >= 10 ? minute : "0" + minute;
+                                                        second = second >= 10 ? second : "0" + second;
+                                                        return minute + ":" + second;
+                                                    }
+
+                                                    function changeProcess(siteX) {
+                                                        var thisX = sliderTag.offsetLeft;
+                                                        // console.log(siteX - 560)
+                                                        thisX = siteX - 560
+
+                                                        // mouseX = siteX - thisX;
+                                                        // console.log(thisX)
+                                                        // *****将当前播放置为鼠标的位置
+                                                        var place = (thisX / 322.5) * musicAudio.duration;
+                                                        //注意：上一行的mousex-100的位置表示鼠标相对进度条起始位置的长度
+                                                        musicAudio.currentTime = place;//将播放时间设置为鼠标所在的进度条位置上代表的时间
+
+                                                    }
+                                                }
+                                            }
+                                        })
                                     }
+
                                 }
                             })
-                            
-                            
+
+
                         })
                     }
                 }
@@ -395,22 +603,22 @@ window.onload = function () {
         // console.log(musicAudio)
 
         //创建歌单对象数组
-        let myList = [{
-            id: 0,
-            name: '可愛くなりたい ( 想变得可爱 )',
-            author: 'HoneyWorks',
-            // time: 04: 12,
-            list: '可愛くなりたい',
-            musicUrl: 'https://music.163.com/song/media/outer/url?id=1941266022.mp3',
-        }, {
-            id: 1,
-            name: 'おかえり ( 欢迎回来 )',
-            author: '小岩井ことり',
-            // time: 04: 12,
-            list: 'おかえり',
-            musicUrl: 'https://music.163.com/song/media/outer/url?id=34367795.mp3',
-        }]
-        
+        // let myList = [{
+        //     id: 0,
+        //     name: '可愛くなりたい ( 想变得可爱 )',
+        //     author: 'HoneyWorks',
+        //     // time: 04: 12,
+        //     list: '可愛くなりたい',
+        //     musicUrl: 'https://music.163.com/song/media/outer/url?id=1941266022.mp3',
+        // }, {
+        //     id: 1,
+        //     name: 'おかえり ( 欢迎回来 )',
+        //     author: '小岩井ことり',
+        //     // time: 04: 12,
+        //     list: 'おかえり',
+        //     musicUrl: 'https://music.163.com/song/media/outer/url?id=34367795.mp3',
+        // }]
+        let myList = []
         //获取歌单
         // const recomNowList=document.querySelectorAll('.list-table-body .table-row')
         // for(let i=0;i<recomNowList.length;i++){
@@ -439,186 +647,184 @@ window.onload = function () {
         let sliderFlag = 0
         //录入歌单第一首歌
 
-        playAll.addEventListener('click', function () {
-            if (songFlag === 0) {
-                // console.log(11)
-                numSong = 0
-                songFlag = 1
-                // console.log(typeof (numSong))
-                // console.log(myList[0].musicUrl)
-                musicAudio.src = myList[numSong].musicUrl
-                //转换为开始按钮
-                playSong.style.display = 'block'
-                pauseSong.style.display = 'none'
-                // console.log(musicAudio.src)
-                beforeDTR.style.display = 'none'
-                for (let i = 0; i < myList.length; i++) {
-                    // console.log(11)
-                    let tr = document.createElement('tr')
-                    tr.classList.add('table-row-change')
-                    //更换左下角信息
-                    document.querySelector('.listen-name').innerHTML=myList[numSong].name
-                    document.querySelector('.listen-author').innerHTML=myList[numSong].author
+        // playAll.addEventListener('click', function () {
+        //     if (songFlag === 0) {
+        //         // console.log(11)
+        //         numSong = 0
+        //         songFlag = 1
+        //         // console.log(typeof (numSong))
+        //         // console.log(myList[0].musicUrl)
+        //         musicAudio.src = myList[numSong].musicUrl
+        //         //转换为开始按钮
+        //         playSong.style.display = 'block'
+        //         pauseSong.style.display = 'none'
+        //         // console.log(musicAudio.src)
+        //         beforeDTR.style.display = 'none'
+        //         for (let i = 0; i < myList.length; i++) {
+        //             // console.log(11)
+        //             let tr = document.createElement('tr')
+        //             tr.classList.add('table-row-change')
+        //             //更换左下角信息
+        //             document.querySelector('.listen-name').innerHTML = myList[numSong].name
+        //             document.querySelector('.listen-author').innerHTML = myList[numSong].author
 
-                    tr.innerHTML = `
-                <td class="drawer-column">
-                    <div class="cell">${myList[i].name}</div>
-                </td>
-                <td class="drawer-column">
-                    <div class="cell">${myList[i].author}</div>
-                </td>
-                <td class="drawer-column">
-                    <div class="cell">00:00</div>
-                </td>`
-                    //给第一首歌添加高亮
-                    drawerBody.appendChild(tr)
-                    if (numSong === i) {
-                        tr.classList.add('drawer-row-song-change')
-                    }
-                    //歌单内双击歌曲播放
-                    tr.addEventListener('dblclick', function () {
-                        // console.log(22)
-                        numSong = i
-                        musicAudio.pause()
-                        musicAudio.src = myList[numSong].musicUrl
-                        musicAudio.play()
-                        //转换为停止按钮
-                        playSong.style.display = 'none'
-                        pauseSong.style.display = 'block'
-                        //高亮跳转
-                        document.querySelector('.drawer-row-song-change').classList.remove('drawer-row-song-change')
-                        tr.classList.add('drawer-row-song-change')
-                        //更换左下角信息
-                        document.querySelector('.listen-name').innerHTML=myList[numSong].name
-                        document.querySelector('.listen-author').innerHTML=myList[numSong].author
-                    })
-                }
-            }
-        })
-        //开始
-        playSong.addEventListener('click', function () {
-            // console.log(11)
-            musicAudio.play()
-            //转换为停止按钮
-            playSong.style.display = 'none'
-            pauseSong.style.display = 'block'
-            timeSpan()
+        //             tr.innerHTML = `
+        //         <td class="drawer-column">
+        //             <div class="cell">${myList[i].name}</div>
+        //         </td>
+        //         <td class="drawer-column">
+        //             <div class="cell">${myList[i].author}</div>
+        //         </td>
+        //         <td class="drawer-column">
+        //             <div class="cell">00:00</div>
+        //         </td>`
+        //             //给第一首歌添加高亮
+        //             drawerBody.appendChild(tr)
+        //             if (numSong === i) {
+        //                 tr.classList.add('drawer-row-song-change')
+        //             }
+        //             //歌单内双击歌曲播放
+        //             tr.addEventListener('dblclick', function () {
+        //                 // console.log(22)
+        //                 numSong = i
+        //                 musicAudio.pause()
+        //                 musicAudio.src = myList[numSong].musicUrl
+        //                 musicAudio.play()
+        //                 //转换为停止按钮
+        //                 playSong.style.display = 'none'
+        //                 pauseSong.style.display = 'block'
+        //                 //高亮跳转
+        //                 document.querySelector('.drawer-row-song-change').classList.remove('drawer-row-song-change')
+        //                 tr.classList.add('drawer-row-song-change')
+        //                 //更换左下角信息
+        //                 document.querySelector('.listen-name').innerHTML = myList[numSong].name
+        //                 document.querySelector('.listen-author').innerHTML = myList[numSong].author
+        //             })
+        //         }
+        //     }
+        // })
+        // //开始
+        // playSong.addEventListener('click', function () {
+        //     // console.log(11)
+        //     musicAudio.play()
+        //     //转换为停止按钮
+        //     playSong.style.display = 'none'
+        //     pauseSong.style.display = 'block'
+        //     timeSpan()
+        // })
+        // //停止
+        // pauseSong.addEventListener('click', function () {
+        //     musicAudio.pause()
+        //     //转换为开始按钮
+        //     playSong.style.display = 'block'
+        //     pauseSong.style.display = 'none'
+        //     // clearInterval('timeSpan')
+        // })
+        // //下一首
+        // nextSong.addEventListener('click', function () {
+        //     // console.log(numSong)
+        //     numSong = numSong + 1 >= myList.length ? 0 : numSong + 1
+        //     // console.log(numSong)
+        //     musicAudio.pause()
+        //     musicAudio.src = myList[numSong].musicUrl
+        //     musicAudio.play()
+        //     //转换为停止按钮
+        //     playSong.style.display = 'none'
+        //     pauseSong.style.display = 'block'
+        //     //更换左下角信息
+        //     document.querySelector('.listen-name').innerHTML = myList[numSong].name
+        //     document.querySelector('.listen-author').innerHTML = myList[numSong].author
+        // })
+        // //上一首
+        // lastSong.addEventListener('click', function () {
+        //     // console.log(numSong)
+        //     numSong = numSong - 1 < 0 ? myList.length - 1 : numSong - 1
+        //     // console.log(numSong)
+        //     musicAudio.pause()
+        //     musicAudio.src = myList[numSong].musicUrl
+        //     musicAudio.play()
+        //     //转换为停止按钮
+        //     playSong.style.display = 'none'
+        //     pauseSong.style.display = 'block'
+        //     //更换左下角信息
+        //     document.querySelector('.listen-name').innerHTML = myList[numSong].name
+        //     document.querySelector('.listen-author').innerHTML = myList[numSong].author
+        // })
+        // //播放结束时自动播放下一首
+        // musicAudio.addEventListener('ended', function () {
+        //     numSong = numSong + 1 >= myList.length ? 0 : numSong + 1
+        //     musicAudio.pause()
+        //     musicAudio.src = myList[numSong].musicUrl
+        //     musicAudio.play()
+        //     //转换为停止按钮
+        //     playSong.style.display = 'none'
+        //     pauseSong.style.display = 'block'
+        //     //更换左下角信息
+        //     document.querySelector('.listen-name').innerHTML = myList[numSong].name
+        //     document.querySelector('.listen-author').innerHTML = myList[numSong].author
+        // })
+        // //进度条控件  //能用但是不是很能用(或者说很没用)
+        // slideRunway.addEventListener('mousedown', function (e) {
+        //     //拖拽状态设为1
+        //     sliderFlag = 1
+        //     // console.log(e.clientX)
+        //     // let siteX = e.clientX
+        //     // console.log(sliderTag.style.left)
+        //     // if (sliderFlag === 0) {
+        //     //     changeProcess(siteX)
+        //     // }
 
-
-        })
-        //停止
-        pauseSong.addEventListener('click', function () {
-            musicAudio.pause()
-            //转换为开始按钮
-            playSong.style.display = 'block'
-            pauseSong.style.display = 'none'
-            // clearInterval('timeSpan')
-        })
-        //下一首
-        nextSong.addEventListener('click', function () {
-            // console.log(numSong)
-            numSong = numSong + 1 >= myList.length ? 0 : numSong + 1
-            // console.log(numSong)
-            musicAudio.pause()
-            musicAudio.src = myList[numSong].musicUrl
-            musicAudio.play()
-            //转换为停止按钮
-            playSong.style.display = 'none'
-            pauseSong.style.display = 'block'
-            //更换左下角信息
-            document.querySelector('.listen-name').innerHTML=myList[numSong].name
-            document.querySelector('.listen-author').innerHTML=myList[numSong].author
-        })
-        //上一首
-        lastSong.addEventListener('click', function () {
-            // console.log(numSong)
-            numSong = numSong - 1 < 0 ? myList.length - 1 : numSong - 1
-            // console.log(numSong)
-            musicAudio.pause()
-            musicAudio.src = myList[numSong].musicUrl
-            musicAudio.play()
-            //转换为停止按钮
-            playSong.style.display = 'none'
-            pauseSong.style.display = 'block'
-            //更换左下角信息
-            document.querySelector('.listen-name').innerHTML=myList[numSong].name
-            document.querySelector('.listen-author').innerHTML=myList[numSong].author
-        })
-        //播放结束时自动播放下一首
-        musicAudio.addEventListener('ended', function () {
-            numSong = numSong + 1 >= myList.length ? 0 : numSong + 1
-            musicAudio.pause()
-            musicAudio.src = myList[numSong].musicUrl
-            musicAudio.play()
-            //转换为停止按钮
-            playSong.style.display = 'none'
-            pauseSong.style.display = 'block'
-            //更换左下角信息
-            document.querySelector('.listen-name').innerHTML=myList[numSong].name
-            document.querySelector('.listen-author').innerHTML=myList[numSong].author
-        })
-        //进度条控件  //能用但是不是很能用(或者说很没用)
-        slideRunway.addEventListener('mousedown', function (e) {
-            //拖拽状态设为1
-            sliderFlag = 1
-            // console.log(e.clientX)
-            // let siteX = e.clientX
-            // console.log(sliderTag.style.left)
-            // if (sliderFlag === 0) {
-            //     changeProcess(siteX)
-            // }
-
-        })
-        slideRunway.addEventListener('mouseup', function () {
-            sliderFlag = 0
-        })
-        slideRunway.addEventListener('mousemove', function (e) {
-            if (sliderFlag === 1) {
-                // console.log(e.clientX)
-                changeProcess(e.clientX)
-            }
-        })
+        // })
+        // slideRunway.addEventListener('mouseup', function () {
+        //     sliderFlag = 0
+        // })
+        // slideRunway.addEventListener('mousemove', function (e) {
+        //     if (sliderFlag === 1) {
+        //         // console.log(e.clientX)
+        //         changeProcess(e.clientX)
+        //     }
+        // })
 
 
-        function timeSpan() {
-            setInterval(process, 1000)
-        }
+        // function timeSpan() {
+        //     setInterval(process, 1000)
+        // }
 
-        function process() {
-            let Process_Now = (musicAudio.currentTime * 100 / musicAudio.duration) + '%'
-            document.querySelector('.slider-bar').style.width = Process_Now
-            sliderTag.style.left = Process_Now
-            let current_Time = timeFormat(musicAudio.currentTime)
-            let time_All = timeFormat(musicAudio.duration)
-            // document.getElementById("songtime").innerHTML = current_Time + " | " + time_All;
-            document.getElementById('timing').innerHTML = current_Time
-            document.getElementById('end-time').innerHTML = time_All
-            // console.log(musicAudio.fastSeek)
-            // console.log(musicAudio.currentTime)
+        // function process() {
+        //     let Process_Now = (musicAudio.currentTime * 100 / musicAudio.duration) + '%'
+        //     document.querySelector('.slider-bar').style.width = Process_Now
+        //     sliderTag.style.left = Process_Now
+        //     let current_Time = timeFormat(musicAudio.currentTime)
+        //     let time_All = timeFormat(musicAudio.duration)
+        //     // document.getElementById("songtime").innerHTML = current_Time + " | " + time_All;
+        //     document.getElementById('timing').innerHTML = current_Time
+        //     document.getElementById('end-time').innerHTML = time_All
+        //     // console.log(musicAudio.fastSeek)
+        //     // console.log(musicAudio.currentTime)
 
-        }
+        // }
 
-        function timeFormat(number) {
-            var minute = parseInt(number / 60);
-            var second = parseInt(number % 60);
-            minute = minute >= 10 ? minute : "0" + minute;
-            second = second >= 10 ? second : "0" + second;
-            return minute + ":" + second;
-        }
+        // function timeFormat(number) {
+        //     var minute = parseInt(number / 60);
+        //     var second = parseInt(number % 60);
+        //     minute = minute >= 10 ? minute : "0" + minute;
+        //     second = second >= 10 ? second : "0" + second;
+        //     return minute + ":" + second;
+        // }
 
-        function changeProcess(siteX) {
-            var thisX = sliderTag.offsetLeft;
-            // console.log(siteX - 560)
-            thisX = siteX - 560
+        // function changeProcess(siteX) {
+        //     var thisX = sliderTag.offsetLeft;
+        //     // console.log(siteX - 560)
+        //     thisX = siteX - 560
 
-            // mouseX = siteX - thisX;
-            // console.log(thisX)
-            // *****将当前播放置为鼠标的位置
-            var place = (thisX / 322.5) * musicAudio.duration;
-            //注意：上一行的mousex-100的位置表示鼠标相对进度条起始位置的长度
-            musicAudio.currentTime = place;//将播放时间设置为鼠标所在的进度条位置上代表的时间
+        //     // mouseX = siteX - thisX;
+        //     // console.log(thisX)
+        //     // *****将当前播放置为鼠标的位置
+        //     var place = (thisX / 322.5) * musicAudio.duration;
+        //     //注意：上一行的mousex-100的位置表示鼠标相对进度条起始位置的长度
+        //     musicAudio.currentTime = place;//将播放时间设置为鼠标所在的进度条位置上代表的时间
 
-        }
+        // }
 
 
 
